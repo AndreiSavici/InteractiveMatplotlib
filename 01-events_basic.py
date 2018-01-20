@@ -1,10 +1,10 @@
 '''
-Default matplotlib interaction:
-- move mouse over the plotting area. You can see
-  the cursor position in the x and y coordinates
-- while the mouse is over the figure, press keys
-  'k' and 'l' to toggle the logarithmic x, or y 
-  axes, or 'g' to toggle the grid
+Exploring matplotlib events:
+- pressing any mouse button will print information
+  like which button was clicked, if it was a double
+  click or not, the position in figure and data
+  coordinates, or if any key is pressed at the same 
+  time
 '''
 from __future__ import print_function, absolute_import
 import matplotlib.pyplot as plt
