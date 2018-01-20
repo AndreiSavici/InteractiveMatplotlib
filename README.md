@@ -1,6 +1,6 @@
 # InteractiveMatplotlib
 
-This repository is intended to be used as an introduction to handling Matplotlib events, including connecting with PyQt. It is inspired by [tacaswell/interactive_mpl_tutorial](https://github.com/tacaswell/interactive_mpl_tutorial)
+This repository is intended to be used as an introduction to handling Matplotlib events, including connecting with PyQt. It is inspired by [tacaswell/interactive_mpl_tutorial](https://github.com/tacaswell/interactive_mpl_tutorial) and [Jose's fork](https://github.com/jmborr/interactive_mpl_tutorial)
 
 Requirements
 ------------
