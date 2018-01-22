@@ -1,7 +1,13 @@
 import sys
 import numpy as np
 
-from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
+from matplotlib.backends.qt_compat import QtCore, QtWidgets
+try:
+    from matplotlib.backends.qt_compat import is_pyqt5
+except ImportError:
+    def is_pyqt5():
+        return False
+
 if is_pyqt5():
     from matplotlib.backends.backend_qt5agg import (
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
@@ -46,8 +52,8 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
             self.show()
 
     def process_inputs(self):
-        newcolor=self._edit_color.text()
-        newsymbol=self._edit_symbol.text()
+        newcolor=str(self._edit_color.text())
+        newsymbol=str(self._edit_symbol.text())
         try:
             self.line.set_c(newcolor)
         except ValueError:
