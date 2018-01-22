@@ -13,10 +13,16 @@ example) by setting the ``MPLBACKEND`` environment variable to "Qt4Agg" or
 
 import sys
 import time
-
 import numpy as np
 
-from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
+from matplotlib.backends.qt_compat import QtCore, QtWidgets
+try:
+    from matplotlib.backends.qt_compat import is_pyqt5
+except ImportError:
+    def is_pyqt5():
+        from matplotlib.backends.qt_compat import QT_API
+        return QT_API == u'PyQt5'
+
 if is_pyqt5():
     from matplotlib.backends.backend_qt5agg import (
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)

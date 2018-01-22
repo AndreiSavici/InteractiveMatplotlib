@@ -6,7 +6,8 @@ try:
     from matplotlib.backends.qt_compat import is_pyqt5
 except ImportError:
     def is_pyqt5():
-        return False
+        from matplotlib.backends.qt_compat import QT_API
+        return QT_API == u'PyQt5'
 
 if is_pyqt5():
     from matplotlib.backends.backend_qt5agg import (
