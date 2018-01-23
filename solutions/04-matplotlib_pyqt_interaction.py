@@ -79,8 +79,6 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
 
     def process_inputs(self):
         self.setWindowTitle(self._edit_label.text())
-        self.line.set_label(self._edit_label.text())
-        self.line._axes.legend()
         newcolor=str(self._edit_color.text())
         newsymbol=str(self._edit_symbol.text())
         try:
@@ -93,6 +91,8 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
             print('Unrecognized symbol')
         self.line.set_linestyle(str(self._edit_line_style.currentText()))
         self.line.set_linewidth(self._edit_line_width.value())
+        self.line.set_label(self._edit_label.text())
+        self.line._axes.legend()
         self.line.figure.canvas.draw()
 
 
