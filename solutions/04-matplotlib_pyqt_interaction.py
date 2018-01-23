@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 
+import matplotlib as mpl
 from matplotlib.backends.qt_compat import QtCore, QtWidgets
 try:
     from matplotlib.backends.qt_compat import is_pyqt5
@@ -95,6 +96,21 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
         self.line.figure.canvas.draw()
 
 
+class AxisMenu(QtWidgets.QMenu):
+    r"""Popup menu for setting axis scale"""
+    def __init__(self, parent=None):
+        super(AxisMenu, self).__init__(parent=parent)
+        self._axis = None
+        #self.addAction()
+
+    def update(self, axis):
+        self._axis = axis
+        print(axis)
+
+    def apply(self):
+        pass
+
+
 class ApplicationWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(ApplicationWindow, self).__init__()
@@ -107,16 +123,27 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.addToolBar(NavigationToolbar(static_canvas, self))
 
         self._static_ax = static_canvas.figure.add_subplot(111)
+        self._static_ax.xaxis.set_picker(5)
+        self._static_ax.yaxis.set_picker(5)
+        self._static_ax.set_xlabel('time (s)', picker=True)
+        self._static_ax.set_ylabel('signal', picker=True)
+
+        self.curve_dialog=CurvePropertiesDialog()
+        self.axis_menu = AxisMenu(parent=self)
+        self.cid=static_canvas.mpl_connect('pick_event', self.on_pick)
+
+        # Initial plots
         t = np.linspace(0, 10, 51)
         self._static_ax.plot(t, np.sin(t), ".", label='first', picker=5)
         self._static_ax.plot(t, np.cos(t), "o:", label='second', picker=5)
         self._static_ax.legend()
-        self.cid=static_canvas.mpl_connect('pick_event', self.on_pick)
-        self.curve_dialog=CurvePropertiesDialog()
 
-    def on_pick(self,event):
-        self.curve_dialog.update_from_line(event.artist)
-        
+    def on_pick(self, event):
+        if isinstance(event.artist, mpl.lines.Line2D):
+            self.curve_dialog.update_from_line(event.artist)
+        if isinstance(event.artist, mpl.axis.Axis) and \
+            event.mouseevent.button == 3:  # right-click
+            self.axis_menu.update(event.artist)
 
 if __name__ == "__main__":
     qapp = QtWidgets.QApplication(sys.argv)
