@@ -29,6 +29,7 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
         self._label_line_style = QtWidgets.QLabel('Line style')
         self._label_line_width = QtWidgets.QLabel('Line thickness')
         #text inputs
+        self._edit_label = QtWidgets.QLineEdit()
         self._edit_color=QtWidgets.QLineEdit()
         self._edit_symbol=QtWidgets.QLineEdit()
         self._edit_line_style = QtWidgets.QComboBox()
@@ -45,16 +46,17 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
         #layout
         grid = QtWidgets.QGridLayout()
         self.setLayout(grid)
-        grid.addWidget(self._label_color,0,0)
-        grid.addWidget(self._edit_color,0,1)
-        grid.addWidget(self._label_symbol,1,0)
-        grid.addWidget(self._edit_symbol,1,1)
-        grid.addWidget(self._label_line_style, 2, 0)
-        grid.addWidget(self._edit_line_style, 2, 1)
-        grid.addWidget(self._label_line_width, 3, 0)
-        grid.addWidget(self._edit_line_width, 3, 1)
-        grid.addWidget(self._btn_ok,4,0)
-        grid.addWidget(self._btn_cancel,4,1)
+        grid.addWidget(self._edit_label,0,0)
+        grid.addWidget(self._label_color,1,0)
+        grid.addWidget(self._edit_color,1,1)
+        grid.addWidget(self._label_symbol,2,0)
+        grid.addWidget(self._edit_symbol,2,1)
+        grid.addWidget(self._label_line_style, 3, 0)
+        grid.addWidget(self._edit_line_style, 3, 1)
+        grid.addWidget(self._label_line_width, 4, 0)
+        grid.addWidget(self._edit_line_width, 4, 1)
+        grid.addWidget(self._btn_ok,5,0)
+        grid.addWidget(self._btn_cancel,5,1)
         #connections
         self._btn_ok.clicked.connect(self.process_inputs)
         self._btn_cancel.clicked.connect(self.close)
@@ -63,6 +65,8 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
         
     def update_from_line(self,line):
         if line is not None:
+            self.setWindowTitle(line.get_label())
+            self._edit_label.setText(line.get_label())
             self._edit_color.setText(line.get_c())
             self._edit_symbol.setText(line.get_marker())
             self._edit_line_style.setCurrentText(line.get_linestyle())
@@ -73,6 +77,9 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
             self.show()
 
     def process_inputs(self):
+        self.setWindowTitle(self._edit_label.text())
+        self.line.set_label(self._edit_label.text())
+        self.line._axes.legend()
         newcolor=str(self._edit_color.text())
         newsymbol=str(self._edit_symbol.text())
         try:
@@ -101,8 +108,9 @@ class ApplicationWindow(QtWidgets.QMainWindow):
 
         self._static_ax = static_canvas.figure.add_subplot(111)
         t = np.linspace(0, 10, 51)
-        self._static_ax.plot(t, np.sin(t), ".", picker=5)
-        self._static_ax.plot(t, np.cos(t), "o:", picker=5)
+        self._static_ax.plot(t, np.sin(t), ".", label='first', picker=5)
+        self._static_ax.plot(t, np.cos(t), "o:", label='second', picker=5)
+        self._static_ax.legend()
         self.cid=static_canvas.mpl_connect('pick_event', self.on_pick)
         self.curve_dialog=CurvePropertiesDialog()
 
