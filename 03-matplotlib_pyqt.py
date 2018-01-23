@@ -72,5 +72,6 @@ if __name__ == "__main__":
     qapp.exec_()
 
 '''
-Note that the pyqt now has control of communication. Try adding grid, or transform 
+Note that the pyqt now has control of communication. Try adding grid, or transform
+the x or y axis from linear to logarithmic
 '''
