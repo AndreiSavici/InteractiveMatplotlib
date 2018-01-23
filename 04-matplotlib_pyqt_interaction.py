@@ -2,7 +2,6 @@ import sys
 import numpy as np
 
 from matplotlib.backends.qt_compat import QtCore, QtWidgets
-
 try:
     from matplotlib.backends.qt_compat import is_pyqt5
 except ImportError:
@@ -16,7 +15,6 @@ if is_pyqt5():
 else:
     from matplotlib.backends.backend_qt4agg import (
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
-
 from matplotlib.figure import Figure
 
 class CurvePropertiesDialog(QtWidgets.QWidget):

@@ -13,10 +13,16 @@ example) by setting the ``MPLBACKEND`` environment variable to "Qt4Agg" or
 
 import sys
 import time
-
 import numpy as np
 
-from matplotlib.backends.qt_compat import QtCore, QtWidgets, is_pyqt5
+from matplotlib.backends.qt_compat import QtCore, QtWidgets
+try:
+    from matplotlib.backends.qt_compat import is_pyqt5
+except ImportError:
+    def is_pyqt5():
+        from matplotlib.backends.qt_compat import QT_API
+        return QT_API == u'PyQt5'
+
 if is_pyqt5():
     from matplotlib.backends.backend_qt5agg import (
         FigureCanvas, NavigationToolbar2QT as NavigationToolbar)
@@ -40,7 +46,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self._static_ax = static_canvas.figure.add_subplot(111)
         t = np.linspace(0, 10, 501)
         self._static_ax.plot(t, np.tan(t), ".")
-
+        '''
         dynamic_canvas = FigureCanvas(Figure(figsize=(5, 3)))
         layout.addWidget(dynamic_canvas)
         self.addToolBar(QtCore.Qt.BottomToolBarArea,
@@ -57,7 +63,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         # Shift the sinusoid as a function of time.
         self._dynamic_ax.plot(t, np.sin(t + time.time()))
         self._dynamic_ax.figure.canvas.draw()
-
+        '''
 
 if __name__ == "__main__":
     qapp = QtWidgets.QApplication(sys.argv)

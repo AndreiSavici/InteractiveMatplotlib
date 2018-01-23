@@ -16,8 +16,5 @@ plt.ion()
 
 th = np.linspace(0, 2*np.pi, 64)
 fig, ax = plt.subplots()
-lines = ax.plot(th, np.sin(th), 'o-')
-print('line style=',lines[0].get_linestyle())
-
-plt.show()
+ax.plot(th, np.sin(th), 'o-')
 
