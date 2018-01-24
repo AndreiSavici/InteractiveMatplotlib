@@ -164,10 +164,11 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         static_canvas.figure.tight_layout()
 
     def on_pick(self, event):
-        if isinstance(event.artist, mpl.lines.Line2D):
+        if isinstance(event.artist, mpl.lines.Line2D) and \
+        event.mouseevent.dblclick:
             self.curve_dialog.update_from_line(event.artist)
         elif isinstance(event.artist, mpl.axis.Axis) and \
-            event.mouseevent.button == 3:  # right-click
+        event.mouseevent.button == 3:  # right-click
                 AxisMenu(event.artist, parent=self)
         else:
             print("I'm a", event.artist)
