@@ -1,8 +1,11 @@
+from __future__ import print_function
+
 import sys
 import numpy as np
 
 import matplotlib as mpl
-from matplotlib.backends.qt_compat import QtCore, QtWidgets
+import matplotlib.pyplot as plt
+from matplotlib.backends.qt_compat import QtCore, QtWidgets, QtGui
 try:
     from matplotlib.backends.qt_compat import is_pyqt5
 except ImportError:
@@ -93,22 +96,41 @@ class CurvePropertiesDialog(QtWidgets.QWidget):
         self.line.set_linewidth(self._edit_line_width.value())
         self.line.set_label(self._edit_label.text())
         self.line._axes.legend()
+        self.line.figure.tight_layout()
         self.line.figure.canvas.draw()
 
 
 class AxisMenu(QtWidgets.QMenu):
     r"""Popup menu for setting axis scale"""
-    def __init__(self, parent=None):
+    def __init__(self, axis, parent=None):
         super(AxisMenu, self).__init__(parent=parent)
-        self._axis = None
-        #self.addAction()
-
-    def update(self, axis):
         self._axis = axis
-        print(axis)
 
-    def apply(self):
-        pass
+        # toggle the grid on major ticks
+        grid_mutate = 'off' if axis._gridOnMajor else 'on'
+        grid_action = QtWidgets.QAction('Grid ' + grid_mutate, self)
+        grid_action.triggered.connect(
+            self._act_now(lambda: axis.grid(not axis._gridOnMajor)))
+        self.addAction(grid_action)
+
+        # toggle linear and logarithm scale
+        scale_mutate= 'log' if axis.get_scale() == 'linear' else 'linear'
+        scale_action = QtWidgets.QAction(scale_mutate + ' grid ', self)
+        change_scale = axis.axes.set_xscale if \
+            isinstance(axis, mpl.axis.XAxis) else axis.axes.set_yscale
+        scale_action.triggered.connect(
+            self._act_now(lambda: change_scale(scale_mutate)))
+        self.addAction(scale_action)
+
+        # popup the menu at the mouse pointer position
+        self.popup(QtGui.QCursor.pos())
+
+    def _act_now(self, func):
+        r"""Decorator calls the function and updates the plot"""
+        def wrapped():
+            func()
+            self._axis.figure.canvas.draw_idle()
+        return wrapped
 
 
 class ApplicationWindow(QtWidgets.QMainWindow):
@@ -123,13 +145,13 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self.addToolBar(NavigationToolbar(static_canvas, self))
 
         self._static_ax = static_canvas.figure.add_subplot(111)
+
         self._static_ax.xaxis.set_picker(5)
         self._static_ax.yaxis.set_picker(5)
         self._static_ax.set_xlabel('time (s)', picker=True)
         self._static_ax.set_ylabel('signal', picker=True)
 
         self.curve_dialog=CurvePropertiesDialog()
-        self.axis_menu = AxisMenu(parent=self)
         self.cid=static_canvas.mpl_connect('pick_event', self.on_pick)
 
         # Initial plots
@@ -137,13 +159,19 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self._static_ax.plot(t, np.sin(t), ".", label='first', picker=5)
         self._static_ax.plot(t, np.cos(t), "o:", label='second', picker=5)
         self._static_ax.legend()
+        self._static_ax.get_legend().set_picker(5)
+
+        static_canvas.figure.tight_layout()
 
     def on_pick(self, event):
         if isinstance(event.artist, mpl.lines.Line2D):
             self.curve_dialog.update_from_line(event.artist)
-        if isinstance(event.artist, mpl.axis.Axis) and \
+        elif isinstance(event.artist, mpl.axis.Axis) and \
             event.mouseevent.button == 3:  # right-click
-            self.axis_menu.update(event.artist)
+                AxisMenu(event.artist, parent=self)
+        else:
+            print("I'm a", event.artist)
+
 
 if __name__ == "__main__":
     qapp = QtWidgets.QApplication(sys.argv)
