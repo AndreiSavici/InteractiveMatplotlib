@@ -97,9 +97,10 @@ if __name__ == "__main__":
 
 '''
 Exercises:
-- add inputs for linestyle, line thickness
-- add legend, and modify it in the same dialog box. Set the title of the dialog box
+- add inputs for linestyle and line thickness to the Line2D dialog box.
+- add legend, and modify it in the previous dialog box. Set the title of the dialog box
   as the label for the curve
-- add labels to x and y axis. Make axes pickable and create a dialog to modify the
-  axis label, the minimum/maximum, and to be able to use logarithmic scale
+- make the legend draggable
+- add labels to x and y axis. Make axes pickable and create a context menu to add/remove grid and change
+  the scale from linear to log (and viceversa)
 '''
