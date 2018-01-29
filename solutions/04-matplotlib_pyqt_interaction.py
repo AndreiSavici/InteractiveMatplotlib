@@ -115,7 +115,7 @@ class AxisMenu(QtWidgets.QMenu):
 
         # toggle linear and logarithm scale
         scale_mutate= 'log' if axis.get_scale() == 'linear' else 'linear'
-        scale_action = QtWidgets.QAction(scale_mutate + ' grid ', self)
+        scale_action = QtWidgets.QAction(scale_mutate + ' scale ', self)
         change_scale = axis.axes.set_xscale if \
             isinstance(axis, mpl.axis.XAxis) else axis.axes.set_yscale
         scale_action.triggered.connect(
@@ -160,6 +160,7 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         self._static_ax.plot(t, np.cos(t), "o:", label='second', picker=5)
         self._static_ax.legend()
         self._static_ax.get_legend().set_picker(5)
+        self._static_ax.get_legend().draggable()
 
         static_canvas.figure.tight_layout()
 
@@ -170,6 +171,8 @@ class ApplicationWindow(QtWidgets.QMainWindow):
         elif isinstance(event.artist, mpl.axis.Axis) and \
         event.mouseevent.button == 3:  # right-click
                 AxisMenu(event.artist, parent=self)
+        elif isinstance(event.artist, mpl.legend.Legend):
+            print("Hi, I'm a", event.artist)
         else:
             print("I'm a", event.artist)
 
