@@ -18,6 +18,8 @@ User Interface events
 
 If you have used the pan / zoom tools or the 'g', 'l', 'k', etc keys in mpl, you have used the mpl event framework
 
+* Events are available at the figure canvas level
+
 
 +------------------------+----------------------------------------+
 | Event name             | Description                            |
@@ -38,5 +40,13 @@ If you have used the pan / zoom tools or the 'g', 'l', 'k', etc keys in mpl, you
 +------------------------+----------------------------------------+
 
 
- - =cid = canvas.mpl_connect(event_name, callback)=
- - =canvas.mpl_disconnect(cid)=
+
+Processing events
+-----------------
+
+One needs to connect an event to a callback function
+
+```python
+ cid = canvas.mpl_connect(event_name, callback)
+ #canvas.mpl_disconnect(cid)
+```
