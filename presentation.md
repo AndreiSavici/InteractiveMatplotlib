@@ -21,9 +21,9 @@ If you have used the pan / zoom tools or the 'g', 'l', 'k', etc keys in mpl, you
 * Events are available at the figure canvas level
 
 
-+------------------------+----------------------------------------+
+|------------------------|----------------------------------------|
 | Event name             | Description                            |
-+------------------------+----------------------------------------+
+|------------------------|----------------------------------------|
 | `button_press_event`   | mouse button is pressed                |
 | `button_release_event` | mouse button is released		             |
 | `draw_event`           | canvas draw (but before screen update) |
@@ -37,7 +37,7 @@ If you have used the pan / zoom tools or the 'g', 'l', 'k', etc keys in mpl, you
 | `figure_leave_event`   | mouse leaves a figure			               |
 | `axes_enter_event`     | mouse enters a new axes		              |
 | `axes_leave_event`     | mouse leaves an axes                   |
-+------------------------+----------------------------------------+
+|------------------------|----------------------------------------|
 
 
 
