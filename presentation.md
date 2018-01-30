@@ -48,3 +48,5 @@ One needs to connect an event to a callback function
  cid = canvas.mpl_connect(event_name, callback)
  #canvas.mpl_disconnect(cid)
 ```
+
+If you modify some part of a figure, you need to call the `draw` or `draw_idle` methods of the canvas, to update with the changes
