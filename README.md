@@ -6,6 +6,6 @@ Requirements
 ------------
 
 * python (tested with 2.7 and 3.6)
-* Matplotlib (tested with 1.5 and 2.0)
+* Matplotlib (tested with 1.5.3 and 2.0.0)
 * Numpy (tested with 1.7 and 1.12)
 * PyQt4 or PyQt5
